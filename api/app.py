@@ -63,7 +63,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/')
 def index():
-	return 'kusi samuli'
+	return 'hello'
 
 @app.route('/random_text')
 def Random_text():
@@ -73,7 +73,7 @@ def Random_text():
 	number_of_words = randint(5, 25)
 	generated = generate_seq(model, tokenizer, seq_length, seed_text, number_of_words)
 	print('Generated text:\n', generated)
-	capitalized = generated.capitalize().replace(' i ', ' I ').replace(' i.', ' I.')
+	capitalized = generated.capitalize().replace(' i ', ' I ')
 	result = {'data': capitalized + '.'}
 	return jsonify(result)
 
