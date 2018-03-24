@@ -32,7 +32,7 @@ def generate_seq(model, tokenizer, seq_length, seed_text, n_words):
 		# truncate sequences to a fixed length
 		encoded = pad_sequences([encoded], maxlen=seq_length, truncating='pre')
 		# predict probabilities for each word
-		yhat = model.predict_classes(encoded, verbose=0)
+		yhat = model.predict_classes(encoded, verbose=0.5)
 		# map predicted word index to word
 		out_word = ''
 		for word, index in tokenizer.word_index.items():
@@ -42,10 +42,13 @@ def generate_seq(model, tokenizer, seq_length, seed_text, n_words):
 		# append to input
 		in_text += ' ' + out_word
 		result.append(out_word)
-	return ' '.join(result)
+	result = ' '.join(result)
+	sentences = result.split('endofsentence')
+	filter(None, sentences)
+	return sentences[0]
 
 # load cleaned text sequences
-in_filename = 'material.txt'
+in_filename = 'material3.txt'
 doc = load_doc(in_filename)
 lines = doc.split('\n')
 seq_length = len(lines[0].split()) - 1
@@ -61,19 +64,31 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+def generate_seed():
+	random_seed = lines[randint(0, len(lines))]
+	sentences = random_seed.split('endofsentence')
+	filter(None, sentences)
+	longest_sentence = max(sentences, key=len)
+	words = longest_sentence.split(' ')[:3]
+	seed_text = ' '.join(words)
+	seed_text = seed_text.strip()
+	return seed_text
+
+
 @app.route('/')
 def index():
 	return 'hello'
 
 @app.route('/random_text')
 def Random_text():
-	seed_text = lines[randint(0, len(lines))]
+	seed_text = generate_seed()
 	print('Using seed:\n', seed_text + '\n')
 	# generate new text
-	number_of_words = randint(5, 25)
-	generated = generate_seq(model, tokenizer, seq_length, seed_text, number_of_words)
+	number_of_words = randint(15, 30)
+	generated = seed_text + ' ' + generate_seq(model, tokenizer, seq_length, seed_text, number_of_words)
 	print('Generated text:\n', generated)
-	capitalized = generated.capitalize().replace(' i ', ' I ')
+	capitalized = generated.capitalize().replace(' i ', ' I ').replace(' i.', ' I.')
+	capitalized = capitalized.strip()
 	result = {'data': capitalized + '.'}
 	return jsonify(result)
 
