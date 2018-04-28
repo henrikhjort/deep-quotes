@@ -1,0 +1,13 @@
+.container {
+  text-align: center;
+  font-family: 'Cursive';
+  padding: 100px;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.h2 {
+  font-family: 'Helvetica';
+}

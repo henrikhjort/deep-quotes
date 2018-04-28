@@ -1,0 +1,16 @@
+.content {
+  color: #e5e5e5;
+}
+
+.content h2 {
+  font-family: 'Oleo Script';
+  margin-bottom: 20px;
+}
+
+.generated-text {
+  font-family: 'Oswald';
+}
+
+.button {
+  margin-top: 10px;
+}

@@ -69,7 +69,7 @@ def generate_seed():
 	sentences = random_seed.split('endofsentence')
 	filter(None, sentences)
 	longest_sentence = max(sentences, key=len)
-	words = longest_sentence.split(' ')[:3]
+	words = longest_sentence.split(' ')[:2]
 	seed_text = ' '.join(words)
 	seed_text = seed_text.strip()
 	return seed_text
